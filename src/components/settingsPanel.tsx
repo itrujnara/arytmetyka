@@ -22,8 +22,8 @@ export default function SettingsPanel({
   setMaxNumState: Dispatch<SetStateAction<number>>
 }) {
   function clearScores() {
-    localStorage.setItem("correct", "0")
-    localStorage.setItem("wrong", "0")
+    localStorage.removeItem("correct")
+    localStorage.removeItem("wrong")
     window.location.reload()
   }
 

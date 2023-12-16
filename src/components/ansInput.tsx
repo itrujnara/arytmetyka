@@ -1,5 +1,5 @@
 import { Input } from "@/components/ui/input"
-import { Dispatch, SetStateAction } from "react"
+import { ChangeEventHandler } from "react"
 
 export default function AnswerInput({
   value,
@@ -7,13 +7,13 @@ export default function AnswerInput({
   ansState,
 }: {
   value: string
-  onChange: Dispatch<SetStateAction<string>>
+  onChange: ChangeEventHandler
   ansState: number
 }) {
   return (
     <Input
       value={value}
-      onChange={(e) => onChange(e.target.value)}
+      onChange={onChange}
       className={
         "text-center border-4 " +
         (ansState === 0

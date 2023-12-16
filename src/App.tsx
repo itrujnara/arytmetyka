@@ -25,13 +25,13 @@ function App() {
   const initTime = new Date()
 
   useEffect(() => {
-    resetValues()
-  }, [opState])
+    document.addEventListener('keydown', handleKeyDown)
+    return () => {document.removeEventListener('keydown', handleKeyDown)}
+  }, [inputState])
 
   useEffect(() => {
-    localStorage.setItem("correct", correctRef.current.toString())
-    localStorage.setItem("wrong", wrongRef.current.toString())
-  })
+    resetValues()
+  }, [opState])
 
   useEffect(() => {
     const id = setInterval(() => {
@@ -45,6 +45,16 @@ function App() {
     }, 1)
     return () => clearInterval(id)
   })
+
+  function handleKeyDown(e: KeyboardEvent) {
+    console.log(e.key)
+    if(e.key != "Enter") return;
+
+    if(!inputState) return;
+
+    if(activeRef.current) handleVerify()
+    else handleRefresh()
+  }
 
   function showTimer(ms: number) {
     const second = Math.floor((ms / 1000) % 60)
@@ -111,21 +121,23 @@ function App() {
         activeRef.current = false
       }
     }
+    localStorage.setItem("correct", correctRef.current.toString())
+    localStorage.setItem("wrong", wrongRef.current.toString())
   }
 
   function handleSetOp(newOp: string) {
     setOpState(newOp)
   }
 
+  function handleInputChange(event: React.ChangeEvent<HTMLInputElement>) {
+    setInputState(event.target.value);
+  }
+
   return (
     <div className="w-screen max-w-[500px] h-full lg:h-full m-0 px-4 flex flex-col gap-4 items-center justify-center">
       <div>{time}</div>
       <MathDisplay a={aRef.current} b={bRef.current} op={opState} />
-      <AnsInput
-        value={inputState}
-        onChange={setInputState}
-        ansState={ansState}
-      ></AnsInput>
+      <AnsInput value={inputState} onChange={handleInputChange} ansState={ansState} />
       <div className="flex items-center justify-center gap-2">
         <Button onClick={handleRefresh}>
           <RefreshCw size={16} />
@@ -135,8 +147,8 @@ function App() {
         </Button>
       </div>
       <div className="flex items-center justify-center gap-2">
-        <ScoreCounter score={correctRef.current} color="#5EF349" />
-        <ScoreCounter score={wrongRef.current} color="#C70039" />
+        <ScoreCounter score={correctRef.current} type="correct" />
+        <ScoreCounter score={wrongRef.current} type="wrong" />
       </div>
       <SettingsPanel
         opState={opState}
