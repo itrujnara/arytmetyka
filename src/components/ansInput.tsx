@@ -15,13 +15,13 @@ export default function AnswerInput({
       value={value}
       onChange={onChange}
       className={
-        "text-center border-4 " +
+        "text-center border-4 border-gray-300 ring-offset-2 " +
         (ansState === 0
-          ? "border-gray-300"
+          ? ""
           : ansState === 1
-          ? "border-[#5EF349]"
-          : "border-[#C70039]")
+          ? "ring ring-correct"
+          : "ring ring-wrong")
       }
-    ></Input>
+    />
   )
 }

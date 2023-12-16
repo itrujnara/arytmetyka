@@ -25,8 +25,10 @@ function App() {
   const initTime = new Date()
 
   useEffect(() => {
-    document.addEventListener('keydown', handleKeyDown)
-    return () => {document.removeEventListener('keydown', handleKeyDown)}
+    document.addEventListener("keydown", handleKeyDown)
+    return () => {
+      document.removeEventListener("keydown", handleKeyDown)
+    }
   }, [inputState])
 
   useEffect(() => {
@@ -48,11 +50,11 @@ function App() {
 
   function handleKeyDown(e: KeyboardEvent) {
     console.log(e.key)
-    if(e.key != "Enter") return;
+    if (e.key != "Enter") return
 
-    if(!inputState) return;
+    if (!inputState) return
 
-    if(activeRef.current) handleVerify()
+    if (activeRef.current) handleVerify()
     else handleRefresh()
   }
 
@@ -130,14 +132,18 @@ function App() {
   }
 
   function handleInputChange(event: React.ChangeEvent<HTMLInputElement>) {
-    setInputState(event.target.value);
+    setInputState(event.target.value)
   }
 
   return (
     <div className="w-screen max-w-[500px] h-full lg:h-full m-0 px-4 flex flex-col gap-4 items-center justify-center">
       <div>{time}</div>
       <MathDisplay a={aRef.current} b={bRef.current} op={opState} />
-      <AnsInput value={inputState} onChange={handleInputChange} ansState={ansState} />
+      <AnsInput
+        value={inputState}
+        onChange={handleInputChange}
+        ansState={ansState}
+      />
       <div className="flex items-center justify-center gap-2">
         <Button onClick={handleRefresh}>
           <RefreshCw size={16} />
