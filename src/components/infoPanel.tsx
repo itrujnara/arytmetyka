@@ -59,6 +59,28 @@ export default function InfoPanel() {
         tempo (średni czas odpowiedzi). Przyciski umożliwiają powtórzenie tego
         samego wyzwania bądź utworzenie nowego.
       </p>
+      <h2 className="font-bold text-lg">Tryb wyścigu</h2>
+      <p>
+        Tryb wyścigu polega na rozwiązaniu jak najszybszym poprawnym rozwiązaniu
+        ustalonej liczby przykładów.
+      </p>
+      <p>
+        Pierwszym etapem jest ustawienie zasad wyścigu. Należy wybrać działanie,
+        maksymalną liczbę i cel wyścigu (liczbę przykładów). Następnie można
+        rozpocząć wyścig.
+      </p>
+      <p>
+        Podczas wyścigu należy wpisać rozwiązanie zadania w polu tekstowym.
+        Odpowiedź można zatwierdzić przyciskiem lub klawiszem Enter. Po
+        zatwierdzeniu system automatycznie sprawdza odpowiedź i przechodzi do
+        kolejnego przykładu. Nad aktualnym przykładem znajduje się licznik
+        poprawnych odpowiedzi oraz czas wyścigu.
+      </p>
+      <p>
+        Po upływie czasu pojawiają się wyniki wyścigu. Podana jest liczba
+        poprawnych odpowiedzi, a także dokładność w procentach. Przyciski
+        umożliwiają powtórzenie tego samego wyścigu bądź utworzenie nowego.
+      </p>
       <h2 className="font-bold text-lg">Informacje prawne</h2>
       <p>
         Copyright © 2023 Igor Trujnara. Udostępniono na zasadach{" "}

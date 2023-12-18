@@ -1,18 +1,18 @@
 import AccuracyBar from "@/components/accuracyBar"
 import ActionButton from "@/components/actionButton"
 import AnswerInput from "@/components/ansInput"
-import ChallengeTimer from "@/components/challengeTimer"
 import MathDisplay from "@/components/mathDisplay"
-import ScoreCounter from "@/components/scoreCounter"
-import TimeButton from "@/components/timeButton"
+import RaceCounter from "@/components/raceCounter"
+import TargetButton from "@/components/targetButton"
 import { Button } from "@/components/ui/button"
 import { Input } from "@/components/ui/input"
 import { Check, Divide, Dot, Minus, Plus, Shuffle } from "lucide-react"
 import { useEffect, useRef, useState } from "react"
+import { useStopwatch } from "react-timer-hook"
 
-export default function Challenge() {
+export default function Race() {
   const [stage, setStage] = useState(0)
-  const [timeLimit, setTimeLimit] = useState(300)
+  const [target, setTarget] = useState(10)
 
   const [opState, setOpState] = useState("add")
   const [shuffle, setShuffle] = useState(false)
@@ -26,6 +26,8 @@ export default function Challenge() {
   const wrongRef = useRef(0)
 
   const [inputState, setInputState] = useState("")
+
+  const { minutes, seconds, start, reset, pause } = useStopwatch()
 
   console.log(shuffle)
 
@@ -42,9 +44,16 @@ export default function Challenge() {
     }
   }, [inputState])
 
+  // operation change
   useEffect(() => {
     handleRefresh()
   }, [opState, shuffle])
+
+  function getTimeString() {
+    return `${minutes.toString().padStart(2, "0")}:${seconds
+      .toString()
+      .padStart(2, "0")}`
+  }
 
   function getOpName() {
     if (shuffle) return "Różne działania"
@@ -52,18 +61,6 @@ export default function Challenge() {
     else if (opState == "sub") return "Odejmowanie"
     else if (opState == "mul") return "Mnożenie"
     else return "Dzielenie"
-  }
-
-  function getPace() {
-    const paceNum = timeLimit / (correctRef.current + wrongRef.current)
-    return (+paceNum.toFixed(2)).toString()
-  }
-
-  function getTimeLimitString() {
-    const minutes = timeLimit / 60
-    if (minutes == 1) return "1 minuta"
-    else if (minutes < 5) return `${minutes} minuty`
-    else return `${minutes} minut`
   }
 
   function handleKeyDown(e: KeyboardEvent) {
@@ -118,6 +115,11 @@ export default function Challenge() {
     if (inputState === "") return
     if (parseInt(inputState) === res) {
       correctRef.current += 1
+      if (correctRef.current >= target) {
+        setStage(2)
+        pause()
+        return
+      }
     } else {
       wrongRef.current += 1
     }
@@ -131,19 +133,17 @@ export default function Challenge() {
   function handleStart() {
     correctRef.current = 0
     wrongRef.current = 0
+    setInputState("")
     setStage(1)
     resetValues()
+    reset()
+    start()
   }
 
-  function handleTimeUp() {
-    console.log("Time Up")
-    setStage(2)
-  }
-
-  function ChallengeCreator() {
+  function RaceCreator() {
     return (
       <>
-        <h2 className="text-lg font-bold mb-2">Utwórz wyzwanie</h2>
+        <h2 className="text-lg font-bold mb-2">Utwórz wyścig</h2>
         <div className="mb-2">Działanie</div>
         <div className="flex flex-row gap-2 items-center justify-center">
           <ActionButton
@@ -212,31 +212,27 @@ export default function Challenge() {
           value={maxNumState}
           onChange={(e) => setMaxNumState(parseInt(e.target.value))}
         />
-        <div className="my-2">Limit czasu</div>
+        <div className="my-2">Cel</div>
         <div className="flex flex-row gap-2 items-center justify-center">
-          <TimeButton
-            timeValue={60}
-            timeState={timeLimit}
-            timeText="1 minuta"
-            setTime={setTimeLimit}
+          <TargetButton
+            targetValue={10}
+            targetState={target}
+            setTarget={setTarget}
           />
-          <TimeButton
-            timeValue={180}
-            timeState={timeLimit}
-            timeText="3 minuty"
-            setTime={setTimeLimit}
+          <TargetButton
+            targetValue={25}
+            targetState={target}
+            setTarget={setTarget}
           />
-          <TimeButton
-            timeValue={300}
-            timeState={timeLimit}
-            timeText="5 minut"
-            setTime={setTimeLimit}
+          <TargetButton
+            targetValue={50}
+            targetState={target}
+            setTarget={setTarget}
           />
-          <TimeButton
-            timeValue={600}
-            timeState={timeLimit}
-            timeText="10 minut"
-            setTime={setTimeLimit}
+          <TargetButton
+            targetValue={100}
+            targetState={target}
+            setTarget={setTarget}
           />
         </div>
         <Button className="my-4" onClick={() => handleStart()}>
@@ -246,40 +242,25 @@ export default function Challenge() {
     )
   }
 
-  function ChallengeResults() {
+  function RaceResults() {
     const accuracy = Math.round(
       (correctRef.current / (correctRef.current + wrongRef.current)) * 100
     )
     return (
       <div className="flex flex-col gap-4">
-        <h2 className="text-lg font-bold my-2">Wyniki wyzwania</h2>
+        <h2 className="text-lg font-bold my-2">Wyniki wyścigu</h2>
         <h3>
-          {getOpName()} do {maxNumState}, {getTimeLimitString()}
+          {getOpName()} do {maxNumState}, {target} poprawnych
         </h3>
-        <div className="flex flex-row gap-4 items-center justify-center">
-          <div>Poprawne odpowiedzi</div>
-          <div className="bg-correct px-4 py-2 rounded-md text-lg">
-            {correctRef.current}
-          </div>
-        </div>
-        <div className="flex flex-row gap-4 items-center justify-center">
-          <div>Błędne odpowiedzi</div>
-          <div className="bg-wrong px-4 py-2 rounded-md text-lg">
-            {wrongRef.current}
-          </div>
+        <div className="bg-time text-3xl px-4 py-2 rounded-md mx-auto">
+          {getTimeString()}
         </div>
         <AccuracyBar accuracy={accuracy} />
-        <div className="flex flex-row gap-4 items-center justify-center">
-          <div>Tempo</div>
-          <div className="bg-secondary px-4 py-2 rounded-md text-lg">
-            {getPace()}s
-          </div>
-        </div>
         <Button onClick={handleStart} className="w-max mx-auto">
           Spróbuj ponownie
         </Button>
         <Button onClick={() => setStage(0)} className="w-max mx-auto">
-          Nowe wyzwanie
+          Nowy wyścig
         </Button>
       </div>
     )
@@ -288,14 +269,11 @@ export default function Challenge() {
   return (
     <div>
       {stage === 0 ? (
-        <ChallengeCreator />
+        <RaceCreator />
       ) : stage === 1 ? (
         <div className="flex flex-col gap-4">
-          <ChallengeTimer timeLimit={timeLimit} onExpire={handleTimeUp} />
-          <div className="flex items-center justify-center gap-2">
-            <ScoreCounter score={correctRef.current} type="correct" />
-            <ScoreCounter score={wrongRef.current} type="wrong" />
-          </div>
+          <div>{getTimeString()}</div>
+          <RaceCounter correct={correctRef.current} target={target} />
           <MathDisplay a={aRef.current} b={bRef.current} op={opState} />
           <div className="flex flex-row gap-3">
             <AnswerInput
@@ -309,7 +287,7 @@ export default function Challenge() {
           </div>
         </div>
       ) : (
-        <ChallengeResults />
+        <RaceResults />
       )}
     </div>
   )

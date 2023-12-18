@@ -11,6 +11,7 @@ export default function Navigation({ ...props }) {
     >
       <NavEntry to="/">Trening</NavEntry>
       <NavEntry to="/challenge">Wyzwanie</NavEntry>
+      <NavEntry to="/race">Wyścig</NavEntry>
       <NavEntry to="/about">Informacje</NavEntry>
     </ul>
   )

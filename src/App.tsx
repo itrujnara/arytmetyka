@@ -4,6 +4,7 @@ import Training from "./pages/Training"
 import Challenge from "./pages/Challenge"
 import Navigation from "./components/navigation"
 import InfoPanel from "./components/infoPanel"
+import Race from "./pages/Race"
 
 function App() {
   return (
@@ -13,6 +14,7 @@ function App() {
         <Routes>
           <Route path="/" Component={Training} />
           <Route path="/challenge" Component={Challenge} />
+          <Route path="/race" Component={Race} />
           <Route path="/about" Component={InfoPanel} />
         </Routes>
       </div>

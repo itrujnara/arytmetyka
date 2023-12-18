@@ -5,6 +5,7 @@ import { RefreshCw, Check } from "lucide-react"
 import MathDisplay from "@/components/mathDisplay"
 import SettingsPanel from "@/components/settingsPanel"
 import ScoreCounter from "@/components/scoreCounter"
+import { useStopwatch } from "react-timer-hook"
 
 export default function Training() {
   const aRef = useRef(Math.ceil(Math.random() * 10))
@@ -15,16 +16,18 @@ export default function Training() {
   const [maxNumState, setMaxNumState] = useState(100)
   const [ansState, setAnsState] = useState(0)
   const [res, setRes] = useState(evalResult())
-  const [count, setCount] = useState(0)
-  const [time, setTime] = useState("00:00:00")
+  const { minutes, seconds, start } = useStopwatch()
 
   const correctRef = useRef(parseInt(localStorage.getItem("correct") || "0"))
   const wrongRef = useRef(parseInt(localStorage.getItem("wrong") || "0"))
 
+  console.log(minutes, seconds)
+
   const activeRef = useRef(true)
 
-  const initTime = new Date()
+  useEffect(() => start(), [])
 
+  // key listener
   useEffect(() => {
     document.addEventListener("keydown", handleKeyDown)
     return () => {
@@ -32,22 +35,16 @@ export default function Training() {
     }
   }, [inputState])
 
+  // operation change
   useEffect(() => {
     handleRefresh()
   }, [opState, shuffle])
 
-  useEffect(() => {
-    const id = setInterval(() => {
-      const left = count + (new Date().getTime() - initTime.getTime())
-      setCount(left)
-      showTimer(left)
-      if (left <= 0) {
-        setTime("00:00:00:00")
-        clearInterval(id)
-      }
-    }, 1)
-    return () => clearInterval(id)
-  })
+  function getTimeString() {
+    return `${minutes.toString().padStart(2, "0")}:${seconds
+      .toString()
+      .padStart(2, "0")}`
+  }
 
   function handleKeyDown(e: KeyboardEvent) {
     if (e.key != "Enter") return
@@ -56,16 +53,6 @@ export default function Training() {
 
     if (activeRef.current) handleVerify()
     else handleRefresh()
-  }
-
-  function showTimer(ms: number) {
-    const second = Math.floor((ms / 1000) % 60)
-      .toString()
-      .padStart(2, "0")
-    const minute = Math.floor((ms / 1000 / 60) % 60)
-      .toString()
-      .padStart(2, "0")
-    setTime(minute + ":" + second)
   }
 
   function randomInRange(min: number, max: number) {
@@ -115,6 +102,7 @@ export default function Training() {
   }
 
   function handleVerify() {
+    if (inputState === "") return
     if (parseInt(inputState) === res) {
       setAnsState(1)
       if (activeRef.current) {
@@ -146,7 +134,7 @@ export default function Training() {
 
   return (
     <div className="flex flex-col gap-4 items-center justify-center">
-      <div>{time}</div>
+      <div>{getTimeString()}</div>
       <div className="flex items-center justify-center gap-2">
         <ScoreCounter score={correctRef.current} type="correct" />
         <ScoreCounter score={wrongRef.current} type="wrong" />

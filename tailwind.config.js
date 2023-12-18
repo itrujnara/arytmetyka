@@ -11,6 +11,7 @@ module.exports = {
       correct: "#5EF349",
       wrong: "#C70039",
       mid: "#FFC300",
+      time: "#3498DB",
     },
     container: {
       center: true,
