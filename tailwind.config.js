@@ -10,6 +10,7 @@ module.exports = {
     colors: {
       correct: "#5EF349",
       wrong: "#C70039",
+      mid: "#FFC300",
     },
     container: {
       center: true,

@@ -6,18 +6,22 @@ import {
   AccordionItem,
   AccordionTrigger,
 } from "./ui/accordion"
-import { Divide, Dot, Minus, Plus } from "lucide-react"
+import { Divide, Dot, Minus, Plus, Shuffle } from "lucide-react"
 import { Input } from "./ui/input"
 import { Button } from "./ui/button"
 
 export default function SettingsPanel({
   opState,
   handleSetOp,
+  shufState,
+  handleSetShuf,
   maxNumState,
   setMaxNumState,
 }: {
   opState: string
   handleSetOp: (a: string) => void
+  shufState: boolean
+  handleSetShuf: (a: boolean) => void
   maxNumState: number
   setMaxNumState: Dispatch<SetStateAction<number>>
 }) {
@@ -37,30 +41,62 @@ export default function SettingsPanel({
             <ActionButton
               op={opState}
               ownOp="add"
-              onClick={() => handleSetOp("add")}
+              shuf={shufState}
+              tooltipName="Dodawanie"
+              onClick={() => {
+                handleSetOp("add")
+                handleSetShuf(false)
+              }}
             >
               <Plus />
             </ActionButton>
             <ActionButton
               op={opState}
               ownOp="sub"
-              onClick={() => handleSetOp("sub")}
+              shuf={shufState}
+              tooltipName="Odejmowanie"
+              onClick={() => {
+                handleSetOp("sub")
+                handleSetShuf(false)
+              }}
             >
               <Minus />
             </ActionButton>
             <ActionButton
               op={opState}
               ownOp="mul"
-              onClick={() => handleSetOp("mul")}
+              shuf={shufState}
+              tooltipName="Mnożenie"
+              onClick={() => {
+                handleSetOp("mul")
+                handleSetShuf(false)
+              }}
             >
               <Dot />
             </ActionButton>
             <ActionButton
               op={opState}
               ownOp="div"
-              onClick={() => handleSetOp("div")}
+              shuf={shufState}
+              tooltipName="Dzielenie"
+              onClick={() => {
+                handleSetOp("div")
+                handleSetShuf(false)
+              }}
             >
               <Divide />
+            </ActionButton>
+            <ActionButton
+              op={opState}
+              ownOp="all"
+              shuf={shufState}
+              tooltipName="Mieszane"
+              onClick={() => {
+                handleSetOp("add")
+                handleSetShuf(true)
+              }}
+            >
+              <Shuffle />
             </ActionButton>
           </div>
           <div className="my-2">Maksymalna liczba</div>
