@@ -255,6 +255,12 @@ export default function Race() {
         <div className="bg-time text-3xl px-4 py-2 rounded-md mx-auto">
           {getTimeString()}
         </div>
+        <div className="flex flex-row gap-4 items-center justify-center">
+          <div>Błędne odpowiedzi</div>
+          <div className="bg-wrong px-4 py-2 rounded-md text-lg">
+            {wrongRef.current}
+          </div>
+        </div>
         <AccuracyBar accuracy={accuracy} />
         <Button onClick={handleStart} className="w-max mx-auto">
           Spróbuj ponownie

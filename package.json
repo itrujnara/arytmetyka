@@ -1,7 +1,7 @@
 {
   "name": "tabliczka-mnozenia",
   "private": true,
-  "version": "0.3.0",
+  "version": "0.3.1",
   "homepage": "https://itrujnara.github.io/arytmetyka",
   "type": "module",
   "scripts": {

@@ -85,7 +85,13 @@ export default function InfoPanel() {
       <p>
         Copyright © 2023 Igor Trujnara. Udostępniono na zasadach{" "}
         <a href="https://opensource.org/license/mit/">licencji MIT</a>.
+        Korzystanie z aplikacji jest całkowicie bezpłatne, jednak jeśli chcesz
+        wesprzeć otwarte oprogramowanie lub podziękować, skorzystaj z przycisku
+        poniżej.
       </p>
+      <a href="https://www.buymeacoffee.com/itrujnara" className="mx-auto my-2">
+        <img src="https://img.buymeacoffee.com/button-api/?text=Podaruj kawę&emoji=&slug=itrujnara&button_colour=FFDD00&font_colour=000000&font_family=Lato&outline_colour=000000&coffee_colour=ffffff" />
+      </a>
     </div>
   )
 }
